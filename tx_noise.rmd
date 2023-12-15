@@ -1,0 +1,215 @@
+---
+title: "E-P Loops and Transcriptional Noise"
+output: html_document
+---
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(lmtest)
+library(ggfortify)
+library(car)
+
+#loading in data
+kinetics_noise <- read.delim("ln_nas_linked_kinetics_noise.bed")
+kinetics_noise <- kinetics_noise %>% filter(Next > 0)
+#head(kinetics_noise)
+```
+
+```{r}
+ggplot(kinetics_noise) +
+    geom_point(aes(x=bs, y=Nint)) +
+    scale_y_log10() +
+    scale_x_log10() +
+    geom_smooth(aes(x=bs, y=Nint)) +
+    theme_classic(base_size = 18) +
+    ylab("Intrinsic Noise") +
+    xlab("Burst Frequency")
+
+
+
+ggplot(kinetics_noise) +
+  geom_point(aes(x=k_on, y=Nint)) +
+  scale_y_log10() +
+  scale_x_log10() +
+  geom_smooth(aes(x=k_on, y=Nint))+
+  theme_classic(base_size = 18) +
+  ylab("Intrinsic Noise") +
+  xlab("Burst Frequency")
+
+ggplot(kinetics_noise) +
+        geom_point(aes(x=bs, y=Next)) +
+        scale_y_log10() +
+        scale_x_log10() +
+        geom_smooth(aes(x=bs, y=Next))+
+        theme_classic(base_size = 18) +
+        ylab("Extrinsic Noise") +
+        xlab("Burst Frequency")
+
+ggplot(kinetics_noise) +
+  geom_point(aes(x=bs, y=Ntot)) +
+  scale_y_log10() +
+  scale_x_log10() +
+  geom_smooth(aes(x=bs, y=Ntot))+
+  theme_classic(base_size = 18) +
+  ylab("Total Noise") +
+  xlab("Burst Frequency")
+
+
+
+```
+
+
+```{r}
+mid<-mean(log10(kinetics_noise$Nint))
+ggplot(kinetics_noise) +
+        geom_point(aes(x=bs, y=k_on, colour = log10(Nint))) +
+        scale_x_log10() +
+        scale_y_log10() +
+        theme_minimal(base_size = 18) +
+        scale_color_gradient2(midpoint=mid, low="blue", mid="grey",
+                              high="red", space ="Lab" ) +
+        ylab("Burst Frequency") +
+        xlab("Burst Size")
+mid2<-mean(log10(kinetics_noise$Next))
+ggplot(kinetics_noise) +
+        geom_point(aes(x=bs, y=k_on, colour = log10(Next))) +
+        scale_x_log10() +
+        scale_y_log10() +
+        theme_minimal(base_size = 18) +
+        scale_color_gradient2(midpoint=mid2, low="blue", mid="grey",
+                              high="red", space ="Lab" ) +
+        ylab("Burst Frequency") +
+        xlab("Burst Size")
+
+mid3<-mean(log10(kinetics_noise$Ntot))
+ggplot(kinetics_noise) +
+        geom_point(aes(x=bs, y=k_on, colour = log10(Ntot))) +
+        scale_x_log10() +
+        scale_y_log10() +
+        theme_minimal(base_size = 18) +
+        scale_color_gradient2(midpoint=mid, low="blue", mid="grey",
+                              high="red", space ="Lab" ) +
+        ylab("Burst Frequency") +
+        xlab("Burst Size")
+
+
+```
+```{r}
+library(ggpubr)
+t.test(log10(kinetics_noise$Ntot[which(as.logical(kinetics_noise$anchor))]),log10(kinetics_noise$Ntot[which(!as.logical(kinetics_noise$anchor))]))
+ggplot(kinetics_noise, aes(x=factor(anchor), Ntot, fill = anchor)) +
+        geom_violin() +
+        geom_boxplot(width=0.1) +
+        theme_minimal(base_size = 12) +
+        ylab( "Total Transcriptional Noise") +
+        scale_y_log10() +
+        xlab("") +
+        scale_x_discrete(labels = NULL) +
+        scale_fill_discrete(name = "Enhancer-Promoter \n Contact") +
+        stat_compare_means(method = "t.test")
+
+
+t.test(log10(kinetics_noise$Next[which(as.logical(kinetics_noise$anchor))]),log10(kinetics_noise$Next[which(!as.logical(kinetics_noise$anchor))]))
+ggplot(kinetics_noise, aes(x=factor(anchor), Next, fill = anchor)) +
+        geom_violin() +
+        geom_boxplot(width=0.1) +
+        theme_minimal(base_size = 12) +
+        ylab( "Extrinsic Transcriptional Noise") +
+        scale_y_log10() +
+        xlab("") +
+        scale_x_discrete(labels = NULL) +
+        scale_fill_discrete(name = "Enhancer-Promoter \n Contact") +
+        stat_compare_means(method = "t.test")
+
+
+
+
+t.test(log10(kinetics_noise$Nint[which(as.logical(kinetics_noise$anchor))]),log10(kinetics_noise$Nint[which(!as.logical(kinetics_noise$anchor))]))
+ggplot(kinetics_noise, aes(x=factor(anchor), Nint, fill = anchor)) +
+        geom_violin() +
+        geom_boxplot(width=0.1) +
+        theme_minimal(base_size = 12) +
+        ylab( "Intrinsic Transcriptional Noise") +
+        scale_y_log10() +
+        xlab("") +
+        scale_x_discrete(labels = NULL) +
+        scale_fill_discrete(name = "Enhancer-Promoter \n Contact") +
+        stat_compare_means(method = "t.test")
+```
+
+
+```{r}
+
+ggplot(kinetics_noise, aes(factor(string.Freq), Next)) +
+        geom_violin(scale = "width", linewidth = 1) +
+        geom_dotplot(binaxis = "y", binwidth = 0.015,  mapping = aes(alpha = factor(string.Freq)), color = "blue") +
+        scale_alpha_manual(values = c(0, seq(from = 0.2, to = 1 , by = 0.9/20))) +
+        scale_y_log10() +
+        geom_smooth(data = kinetics_noise, mapping= aes(Freq, Next), color = "red") +
+        coord_cartesian(xlim = c(0,11)) +
+        theme_minimal(base_size = 18) +
+        theme(legend.position = "none") +
+        ylab("Extrinsic Noise") +
+        xlab("Number of Anchored Enhancers")
+
+
+ggplot(kinetics_noise, aes(factor(string.Freq), Ntot)) +
+        geom_violin(scale = "width", linewidth = 1) +
+        geom_dotplot(binaxis = "y", binwidth = 0.015,  mapping = aes(alpha = factor(string.Freq)), color = "blue") +
+        scale_alpha_manual(values = c(0, seq(from = 0.2, to = 1 , by = 0.9/20))) +
+        scale_y_log10() +
+        geom_smooth(data = kinetics_noise, mapping= aes(Freq, Ntot), color = "red") +
+        coord_cartesian(xlim = c(0,11)) +
+        theme_minimal(base_size = 18) +
+        theme(legend.position = "none") +
+        ylab("Total Noise") +
+        xlab("Number of Anchored Enhancers")
+```
+```{r}
+nint_model <- lm(log10(Nint) ~ Freq * (log10(k_on) + log10(bs)), kinetics_noise)
+nint_model_logi <- lm(log10(Nint) ~ anchor + log10(k_on) + log10(bs), kinetics_noise)
+resettest(nint_model)
+autoplot(nint_model)
+vif(nint_model)
+summary(nint_model)
+```
+```{r}
+next_model <- lm(log10(Next) ~ (log10(k_on)) + log10(bs) + Freq, kinetics_noise)
+
+
+vif(next_model)
+resettest(next_model)
+autoplot(next_model)
+summary(next_model)
+```
+```{r}
+library(lmtest)
+ntot_model <- lm(log10(Ntot) ~ log10(k_on) + log10(bs) + Freq , kinetics_noise)
+vif(ntot_model)
+resettest(ntot_model)
+autoplot(ntot_model)
+summary(ntot_model)
+```
+Finding interactions in higher order modeling
+```{r}
+ntot_model <- lm(log10(Ntot) ~ (log10(k_on) + log10(bs)) * Freq, kinetics_noise)
+vif(ntot_model, type = 'predictor')
+resettest(ntot_model)
+autoplot(ntot_model)
+summary(ntot_model)
+```
+
+```{r}
+library(interactions)
+library(colorspace)
+q10 <- qualitative_hcl(10, "Dark2")
+interact_plot(ntot_model, pred = bs, modx = Freq, modx.values = c(1:10), colors = q10, legend.main = "# of Enhancers") + theme_minimal(base_size = 18) +
+        xlab("Burst Size") +
+        ylab("Total Noise") +
+        scale_x_log10()
+
+
+
+```
