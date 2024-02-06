@@ -1,12 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e83503bd-d583-49d5-a10e-f2fea56c7ab1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.Rhistory" beforeDir="false" afterPath="$PROJECT_DIR$/.Rhistory" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MGIBatchReport_20231207_141900.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Next_vs_bs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Nint_vs_bs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SS3_c57_UMIs_concat_vs_SS3_cast_UMIs_concat_TEST.pkl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bs_ntot_interact.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c57_filtered_ex.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cast_filtered_ex.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/kon_vs_nint.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/linked_kinetics.bed" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/linked_kinetics_noise.bed" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ln_linked_kinetics_noise.bed" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ln_nas_linked_kinetics_noise.bed" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/merged.fixed.BL6_fractional_UMIs.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/merged.fixed.CAST_fractional_UMIs.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mf_imputed_as_counts.pkl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/next_anchors_model_raw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/next_scatter_raw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/nint_scatter_raw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/non_sig_as_ids.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ntot_scatter_raw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/read_pickle.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tx_noise.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/tx_noise.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tx_noise.rmd" beforeDir="false" afterPath="$PROJECT_DIR$/tx_noise.rmd" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2c0detsQfvgEukhwSgiLx7LTIMf" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;last_opened_file_path&quot;: &quot;/opt/anaconda/condabin/conda&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/opt/anaconda/condabin/conda"
   }
-}</component>
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
 </project>

@@ -10,9 +10,10 @@ library(dplyr)
 library(lmtest)
 library(ggfortify)
 library(car)
+library(sjPlot)
 
 #loading in data
-kinetics_noise <- read.delim("ln_nas_linked_kinetics_noise.bed")
+kinetics_noise <- read.delim("data/ln_nas_linked_kinetics_noise.bed")
 kinetics_noise <- kinetics_noise %>% filter(Next > 0)
 #head(kinetics_noise)
 ```
@@ -25,7 +26,7 @@ ggplot(kinetics_noise) +
     geom_smooth(aes(x=bs, y=Nint)) +
     theme_classic(base_size = 18) +
     ylab("Intrinsic Noise") +
-    xlab("Burst Frequency")
+    xlab("Burst Size")
 
 
 
@@ -45,7 +46,7 @@ ggplot(kinetics_noise) +
         geom_smooth(aes(x=bs, y=Next))+
         theme_classic(base_size = 18) +
         ylab("Extrinsic Noise") +
-        xlab("Burst Frequency")
+        xlab("Burst Size")
 
 ggplot(kinetics_noise) +
   geom_point(aes(x=bs, y=Ntot)) +
@@ -54,9 +55,12 @@ ggplot(kinetics_noise) +
   geom_smooth(aes(x=bs, y=Ntot))+
   theme_classic(base_size = 18) +
   ylab("Total Noise") +
-  xlab("Burst Frequency")
+  xlab("Burst Size")
 
+library(PerformanceAnalytics)
 
+data <- kinetics_noise %>% select("k_on", "bs", "Ntot", "Nint", "Next") %>% log10()
+chart.Correlation(data, histogram = TRUE, method = "spearman")
 
 ```
 
@@ -166,6 +170,18 @@ ggplot(kinetics_noise, aes(factor(string.Freq), Ntot)) +
         theme(legend.position = "none") +
         ylab("Total Noise") +
         xlab("Number of Anchored Enhancers")
+
+ggplot(kinetics_noise, aes(factor(string.Freq), Nint)) +
+  geom_violin(scale = "width", linewidth = 1) +
+  geom_dotplot(binaxis = "y", binwidth = 0.015,  mapping = aes(alpha = factor(string.Freq)), color = "blue") +
+  scale_alpha_manual(values = c(0, seq(from = 0.2, to = 1 , by = 0.9/20))) +
+  scale_y_log10() +
+  geom_smooth(data = kinetics_noise, mapping= aes(Freq, Nint), color = "red") +
+  coord_cartesian(xlim = c(0,11)) +
+  theme_minimal(base_size = 18) +
+  theme(legend.position = "none") +
+  ylab("Intrinsic Noise") +
+  xlab("Number of Anchored Enhancers")
 ```
 ```{r}
 nint_model <- lm(log10(Nint) ~ Freq * (log10(k_on) + log10(bs)), kinetics_noise)
@@ -174,15 +190,17 @@ resettest(nint_model)
 autoplot(nint_model)
 vif(nint_model)
 summary(nint_model)
+tab_model(nint_model)
 ```
 ```{r}
-next_model <- lm(log10(Next) ~ (log10(k_on)) + log10(bs) + Freq, kinetics_noise)
+next_model <- lm(log10(Next) ~ ((log10(k_on)) + log10(bs)) * Freq, kinetics_noise)
 
 
 vif(next_model)
 resettest(next_model)
 autoplot(next_model)
 summary(next_model)
+tab_model(next_model)
 ```
 ```{r}
 library(lmtest)
@@ -191,6 +209,7 @@ vif(ntot_model)
 resettest(ntot_model)
 autoplot(ntot_model)
 summary(ntot_model)
+tab_model(ntot_model)
 ```
 Finding interactions in higher order modeling
 ```{r}
@@ -199,6 +218,7 @@ vif(ntot_model, type = 'predictor')
 resettest(ntot_model)
 autoplot(ntot_model)
 summary(ntot_model)
+tab_model(ntot_model)
 ```
 
 ```{r}
@@ -210,6 +230,14 @@ interact_plot(ntot_model, pred = bs, modx = Freq, modx.values = c(1:10), colors 
         ylab("Total Noise") +
         scale_x_log10()
 
+interact_plot(nint_model, pred = k_on, modx = Freq, modx.values = c(1:10), colors = q10, legend.main = "# of Enhancers") + theme_minimal(base_size = 18) +
+  xlab("Burst Frequency") +
+  ylab("Intrinsic Noise") +
+  scale_x_log10()
 
-
+interact_plot(nint_model, pred = bs, modx = Freq, modx.values = c(1:10), colors = q10, legend.main = "# of Enhancers") + theme_minimal(base_size = 18) +
+  xlab("Burst Size") +
+  ylab("Intrinsic Noise") +
+  scale_x_log10()
 ```
+
